@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { connect } from 'react-redux'
+import { IRootState } from './store/reducers'
 
-function App() {
+import { deposit, withdraw } from './store/reducers/account'
+
+interface IAccountProps extends StateProps, DispatchProps {}
+
+function App({ amount, deposit, withdraw }: IAccountProps) {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {amount}
+      <button onClick={() => deposit(1000)}>Deposit</button>
+      <button onClick={() => withdraw(1000)}>Withdraw</button>
     </div>
-  );
+  )
 }
 
-export default App;
+const mapStateToProps = ({ account }: IRootState) => ({
+  amount: account
+})
+
+const mapDispatchToProps = { deposit, withdraw }
+
+type StateProps = ReturnType<typeof mapStateToProps>
+type DispatchProps = typeof mapDispatchToProps
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
